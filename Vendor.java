@@ -47,4 +47,13 @@ public class Vendor {
         System.out.println("Item does not exist");
 
     }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public List<menuItem> getMenu() {
+        return this.menu;
+    }
+
 }
