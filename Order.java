@@ -6,22 +6,28 @@ public class Order {
     private static final AtomicInteger idGenerator = new AtomicInteger(1);
 
     private final int orderId;
+    private String customerName;
     private String vendorName;
     private List<menuItem> items;
     private double totalPrice;
     private String status;
 
     public Order(String vendorName, List<menuItem> items, String status) {
-        this.orderId = idGenerator.getAndIncrement(); // assign unique ID
+        this(vendorName, items, status, "Unknown Customer");
+    }
+
+    public Order(String vendorName, List<menuItem> items, String status, String customerName) {
+        this.orderId = idGenerator.getAndIncrement();
         this.vendorName = vendorName;
         this.items = new ArrayList<>(items);
         this.status = status;
+        this.customerName = customerName;
         this.totalPrice = calculateTotalPrice();
     }
 
     private double calculateTotalPrice() {
         double total = 0.0;
-        for(menuItem item: this.items){
+        for (menuItem item : this.items) {
             total += item.getPrice();
         }
         return total;
@@ -47,18 +53,25 @@ public class Order {
         return status;
     }
 
+    public String getCustomerName() {
+        return customerName;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
 
     public void printOrder() {
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Vendor: " + vendorName);
+        System.out.println("==================================================");
+        System.out.printf("Order ID   : %d\n", orderId);
+        System.out.printf("Customer   : %s\n", customerName);
+        System.out.printf("Vendor     : %s\n", vendorName);
+        System.out.println("Items Ordered:");
         for (menuItem item : items) {
-            System.out.println("  - " + item.getName() + " ($" + item.getPrice() + ")");
+            System.out.printf("  - %s ($%.2f)\n", item.getName(), item.getPrice());
         }
-        System.out.printf("Total: $%.2f\n", totalPrice);
-        System.out.println("Status: " + status);
-        System.out.println("-------------------------");
+        System.out.printf("Total      : $%.2f\n", totalPrice);
+        System.out.printf("Status     : %s\n", status);
+        System.out.println("==================================================");
     }
 }

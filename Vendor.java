@@ -12,7 +12,7 @@ public class Vendor {
     
     public void createMenu(List<menuItem> items){
         menu=items;
-        System.out.print("New Menu Created for " + name);
+        System.out.println("New Menu Created for " + name);
 
     }
 

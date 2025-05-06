@@ -5,19 +5,18 @@ import java.util.Scanner;
 public class Customer {
     private String name;
     private ArrayList<Order> orders;
-    // constructor
-    public Customer(String name){
-        this.name=name;
+
+    public Customer(String name) {
+        this.name = name;
         this.orders = new ArrayList<>();
     }
 
     public void browseByCuisine() {
-        // Read vendor files or metadata by cuisine and print
         if (Main.vendorList.isEmpty()) {
             System.out.println("\nNo vendors available.\n");
             return;
         }
-    
+
         System.out.println("\nAvailable Vendors:");
         for (Vendor v : Main.vendorList) {
             System.out.println("- " + v.getName());
@@ -37,7 +36,9 @@ public class Customer {
         } else {
             System.out.println("\nMenu for " + vendor.getName() + ":");
             for (menuItem item : menu) {
-                System.out.println("- " + item.getName() + " \nPrice: $" + item.getPrice() + "\nIngredients: " + item.getIngredients()+ "\n");
+                System.out.println("- " + item.getName() +
+                                   " \nPrice: $" + item.getPrice() +
+                                   "\nIngredients: " + item.getIngredients() + "\n");
             }
         }
     }
@@ -48,23 +49,26 @@ public class Customer {
             System.out.println("Vendor not found.");
             return;
         }
+
         searchVendor(vendorName);
         List<menuItem> menu = vendor.getMenu();
         List<menuItem> selectedItems = new ArrayList<>();
+
         while (true) {
             System.out.print("Enter item name to add (or type 'done' to finish): ");
             String input = scanner.nextLine().trim();
-    
+
             if (input.equalsIgnoreCase("done")) break;
-    
+
             menuItem matchedItem = searchForItemInMenu(menu, input);
+
             for (menuItem item : menu) {
                 if (item.getName().equalsIgnoreCase(input)) {
                     matchedItem = item;
                     break;
                 }
             }
-    
+
             if (matchedItem != null) {
                 selectedItems.add(matchedItem);
                 System.out.println(matchedItem.getName() + " added.");
@@ -72,33 +76,44 @@ public class Customer {
                 System.out.println("Item not found. Please enter a valid item name.");
             }
         }
+
         if (selectedItems.isEmpty()) {
-            System.out.println("\nNo items selected. Order cancelled.");
+            System.out.println("==================================================");
+            System.out.println("No items selected. Order cancelled.");
+            System.out.println("==================================================");
             return;
         }
-        Order newOrder = new Order(vendorName, selectedItems, "Received");
-        orders.add(newOrder);
 
-        System.out.println("\nOrder placed! Order details:");
+        Order newOrder = new Order(vendorName, selectedItems, "Received", this.name);
+        orders.add(newOrder);
+        Main.orderManager.addOrder(newOrder);
+        System.out.println("Order placed! Order details:");
         newOrder.printOrder();
     }
 
     public void viewOrderStatus(int orderNum) {
         if (orders.isEmpty()) {
+            System.out.println("==================================================");
             System.out.println("You have not placed any orders yet.");
+            System.out.println("==================================================");
             return;
         }
+
         Order order = getOrderById(orderNum);
-        if(order==null) {
-            System.out.println("Invalid order number!");
+
+        if (order == null) {
+            System.out.println("==================================================");
+            System.out.println("Invalid Order Number!");
+            System.out.println("==================================================");
             return;
         }
+
         order.printOrder();
     }
 
     public menuItem searchForItemInMenu(List<menuItem> menu, String inputItem) {
-        for(menuItem item: menu) {
-            if(item.getName().equals(inputItem)) {
+        for (menuItem item : menu) {
+            if (item.getName().equalsIgnoreCase(inputItem)) {
                 return item;
             }
         }
@@ -106,14 +121,14 @@ public class Customer {
     }
 
     public Order getOrderById(int orderNum) {
-        for(Order order: this.orders) {
-            if(order.getOrderId() == orderNum) {
+        for (Order order : this.orders) {
+            if (order.getOrderId() == orderNum) {
                 return order;
             }
         }
         return null;
     }
-    
+
     public String getName() {
         return this.name;
     }
