@@ -2,7 +2,7 @@ import java.util.*;
 public class Main {
 
     public static List<Vendor> vendorList = new ArrayList<>();
-    public static List<Customer> customerList = new ArrayList<>(); // ✅ NEW: remember customers
+    public static List<Customer> customerList = new ArrayList<>();
     public static OrderManager orderManager = new OrderManager();
 
     public static void main (String args[]){    
@@ -42,7 +42,6 @@ public class Main {
         }
         // displays choices 
         while (true) {
-
             System.out.println("1. Create Menu");
             System.out.println("2. Add Menu Item");
             System.out.println("3. Edit Menu Item");
@@ -154,7 +153,6 @@ public class Main {
         System.out.println("Enter your name:");
         String customerName = scanner.nextLine();
 
-        // ✅ Check if this customer already exists
         Customer customer = null;
         for (Customer c : customerList) {
             if (c.getName().equalsIgnoreCase(customerName)) {
@@ -163,7 +161,6 @@ public class Main {
             }
         }
 
-        // ✅ If not, create a new customer and add to the list
         if (customer == null) {
             customer = new Customer(customerName);
             customerList.add(customer);
